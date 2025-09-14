@@ -17,6 +17,8 @@ set(VEXP_PARSER_CMAKE_CONFIG_DIR            "${CMAKE_CURRENT_BINARY_DIR}")
 set(VEXP_PARSER_CMAKE_VERSION_CONFIG_FILE   "${VEXP_PARSER_CMAKE_CONFIG_DIR}/${PROJECT_NAME}ConfigVersion.camke")
 set(VEXP_PARSER_CMAKE_PROJECT_CONFIG_FILE   "${VEXP_PARSER_CMAKE_CONFIG_DIR}/${PROJECT_NAME}Config.cmake")
 set(VEXP_PARSER_CMAKE_PROJECT_TARGETS_FILE  "${PROJECT_NAME}Targets.cmake")
+set(VEXP_PARSER_CMAKE_PROJECT_FIND_BISON "" CACHE PATH "Directory of the bison")
+set(VEXP_PARSER_CMAKE_PROJECT_FIND_FLEX ""  CACHE PATH "Directory of the flex")
 
 
 # ------------------------------------------------------------------------
