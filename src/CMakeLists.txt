@@ -1,7 +1,22 @@
 message(STATUS "Build Type: ${CMAKE_BUILD_TYPE}")
 
-FIND_PACKAGE(BISON 3.0.4 REQUIRED)
-FIND_PACKAGE(FLEX 2.5.35 REQUIRED)
+if (VEXP_PARSER_CMAKE_PROJECT_FIND_BISON)
+  list(APPEND CMAKE_PREFIX_PATH "${VEXP_PARSER_CMAKE_PROJECT_FIND_BISON}")
+else()
+  # default location if using contrib/setup-bison.sh
+  # will also search global paths
+  list(APPEND CMAKE_PREFIX_PATH "${PROJECT_SOURCE_DIR}/deps/bison/bison-install")
+endif()
+
+if (VEXP_PARSER_CMAKE_PROJECT_FIND_FLEX)
+  list(APPEND CMAKE_PREFIX_PATH "${VEXP_PARSER_CMAKE_PROJECT_FIND_FLEX}")
+else()
+  # default location if using contrib/setup-flex.sh
+  # will also search global paths
+  list(APPEND CMAKE_PREFIX_PATH "${PROJECT_SOURCE_DIR}/deps/flex/flex-install")
+endif()
+FIND_PACKAGE(BISON 3.0.4 REQUIRED ${VEXP_PARSER_CMAKE_PROJECT_FIND_BISON})
+FIND_PACKAGE(FLEX 2.5.35 REQUIRED ${VEXP_PARSER_CMAKE_PROJECT_FIND_FLEX})
 
 set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 set(BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR})
@@ -85,33 +100,41 @@ target_include_directories(${VEXP_LIBRARY_NAME}
 
 # ------------------------------------------------------------------------
 
-add_executable(${VEXP_EXECUTABLE_NAME} vexp_test.cc)
 
-if(${CMAKE_PROJECT_NAME} STREQUAL ${PROJECT_NAME})
-  if(${CMAKE_COMPILER_IS_GNUCXX})
-    target_compile_options(${VEXP_EXECUTABLE_NAME} PRIVATE -Wall)
-    target_compile_options(${VEXP_EXECUTABLE_NAME} PRIVATE -W)
-  endif()
-endif()
+#add_executable(${VEXP_EXECUTABLE_NAME} vexp_test.cc)
 
-target_link_libraries(${VEXP_EXECUTABLE_NAME} ${VEXP_LIBRARY_NAME})
+#message(STATUS "Binary dir at the final stage: ${BINARY_DIR}")
+#target_include_directories(${VEXP_EXECUTABLE_NAME} 
+#    PRIVATE ${BINARY_DIR}/src
+#)
 
-target_include_directories(${VEXP_EXECUTABLE_NAME} 
-    PRIVATE ${PROJECT_SOURCE_DIR}/include
-)
+#if(${CMAKE_PROJECT_NAME} STREQUAL ${PROJECT_NAME})
+#  if(${CMAKE_COMPILER_IS_GNUCXX})
+#    target_compile_options(${VEXP_EXECUTABLE_NAME} PRIVATE -Wall)
+#    target_compile_options(${VEXP_EXECUTABLE_NAME} PRIVATE -W)
+#  endif()
+#endif()
+
+#target_link_libraries(${VEXP_EXECUTABLE_NAME} ${VEXP_LIBRARY_NAME})
+
+#target_include_directories(${VEXP_EXECUTABLE_NAME} 
+#    PRIVATE ${PROJECT_SOURCE_DIR}/include
+#)
+
+
 
 # ------------------------------------------------------------------------
 
-install(TARGETS ${VEXP_LIBRARY_NAME} ${VEXP_EXECUTABLE_NAME}
-  EXPORT ${VEXP_PARSER_TARGETS_EXPORT_NAME}
-  LIBRARY DESTINATION lib
-  ARCHIVE DESTINATION lib
-  RUNTIME DESTINATION bin
-  INCLUDES DESTINATION ${VLOG_PARSER_INCLUDE_INSTALL_DIR}
-)
+#install(TARGETS ${VEXP_LIBRARY_NAME} ${VEXP_EXECUTABLE_NAME}
+#  EXPORT ${VEXP_PARSER_TARGETS_EXPORT_NAME}
+#  LIBRARY DESTINATION lib
+#  ARCHIVE DESTINATION lib
+#  RUNTIME DESTINATION bin
+#  INCLUDES DESTINATION ${VLOG_PARSER_INCLUDE_INSTALL_DIR}
+#)
 
-install(
-  DIRECTORY ${VEXP_PARSER_INCLUDE_BUILD_DIR}/vexpparser
-  DESTINATION ${VEXP_PARSER_INCLUDE_INSTALL_DIR}
-)
+#install(
+#  DIRECTORY ${VEXP_PARSER_INCLUDE_BUILD_DIR}/vexpparser
+#  DESTINATION ${VEXP_PARSER_INCLUDE_INSTALL_DIR}
+#)
 
